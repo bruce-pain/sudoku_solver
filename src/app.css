@@ -55,6 +55,8 @@ button {
 
 .grid {
 	display: block;
+	padding: 5px;
+	border-radius: 15px;
 }
 
 .row {
@@ -66,7 +68,23 @@ button {
 	height: 70px;
 	display: grid;
 	place-content: center;
+	border-radius: 8px;
 	margin: 5px;
 	font-size: 4rem;
 	background-color: var(--bg-2);
+}
+
+.cell-input {
+	width: 70px;
+	height: 70px;
+	font-size: 4rem;
+	background-color: var(--bg-2);
+	margin: 5px;
+	text-align: center;
+	border-radius: 8px;
+	color: var(--txt-1);
+}
+
+.cell-input:focus {
+	color: var(--txt-1);
 }

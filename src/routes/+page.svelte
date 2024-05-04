@@ -1,19 +1,30 @@
 <script lang="ts">
-	type State = 'start' | 'solving';
+	type State = 'start' | 'input' | 'solving' | 'finished';
 
 	let state: State = 'start';
-	let timeout = 250;
 	$: grid = [
-		[5, 3, 0, 0, 7, 0, 0, 0, 0],
-		[6, 0, 0, 1, 9, 5, 0, 0, 0],
-		[0, 9, 8, 0, 0, 0, 0, 6, 0],
-		[8, 0, 0, 0, 6, 0, 0, 0, 3],
-		[4, 0, 0, 8, 0, 3, 0, 0, 1],
-		[7, 0, 0, 0, 2, 0, 0, 0, 6],
-		[0, 6, 0, 0, 0, 0, 2, 8, 0],
-		[0, 0, 0, 4, 1, 9, 0, 0, 5],
-		[0, 0, 0, 0, 8, 0, 0, 7, 9]
+		[0, 0, 0, 0, 0, 0, 0, 0, 0],
+		[0, 0, 0, 0, 0, 0, 0, 0, 0],
+		[0, 0, 0, 0, 0, 0, 0, 0, 0],
+		[0, 0, 0, 0, 0, 0, 0, 0, 0],
+		[0, 0, 0, 0, 0, 0, 0, 0, 0],
+		[0, 0, 0, 0, 0, 0, 0, 0, 0],
+		[0, 0, 0, 0, 0, 0, 0, 0, 0],
+		[0, 0, 0, 0, 0, 0, 0, 0, 0],
+		[0, 0, 0, 0, 0, 0, 0, 0, 0]
 	];
+	// let timeout = 0;
+	// $: grid = [
+	// 	[5, 3, 0, 0, 7, 0, 0, 0, 0],
+	// 	[6, 0, 0, 1, 9, 5, 0, 0, 0],
+	// 	[0, 9, 8, 0, 0, 0, 0, 6, 0],
+	// 	[8, 0, 0, 0, 6, 0, 0, 0, 3],
+	// 	[4, 0, 0, 8, 0, 3, 0, 0, 1],
+	// 	[7, 0, 0, 0, 2, 0, 0, 0, 6],
+	// 	[0, 6, 0, 0, 0, 0, 2, 8, 0],
+	// 	[0, 0, 0, 4, 1, 9, 0, 0, 5],
+	// 	[0, 0, 0, 0, 8, 0, 0, 7, 9]
+	// ];
 
 	function sleep(ms) {
 		return new Promise((resolve) => setTimeout(resolve, ms));
@@ -76,25 +87,52 @@
 
 		for (let i = 1; i < 10; i++) {
 			if (check_digit(i, y, x)) {
-				await sleep(timeout).then(() => {
+				// await sleep(timeout).then(() => {
 					grid[y][x] = i;
-				});
+				// });
 
 				if (await solve()) {
 					return true;
 				}
 
-				await sleep(timeout).then(() => {
+				// await sleep(timeout).then(() => {
 					grid[y][x] = 0;
-				});
+				// });
 			}
 		}
 
 		return false;
 	}
 
+	async function start() {
+		console.log(grid);
+		await solve();
+		state = 'finished';
+	}
+
+	function updateCell(e: InputEvent, row, col)
+	{
+		const value = e.data
+		grid[row][col] = value !== null ? parseInt(value) : 0
+	}
+
+	function resetBoard() {
+		state = 'input';
+		grid = [
+			[0, 0, 0, 0, 0, 0, 0, 0, 0],
+			[0, 0, 0, 0, 0, 0, 0, 0, 0],
+			[0, 0, 0, 0, 0, 0, 0, 0, 0],
+			[0, 0, 0, 0, 0, 0, 0, 0, 0],
+			[0, 0, 0, 0, 0, 0, 0, 0, 0],
+			[0, 0, 0, 0, 0, 0, 0, 0, 0],
+			[0, 0, 0, 0, 0, 0, 0, 0, 0],
+			[0, 0, 0, 0, 0, 0, 0, 0, 0],
+			[0, 0, 0, 0, 0, 0, 0, 0, 0]
+		];
+	}
+
 	$: if (state === 'solving') {
-		solve();
+		start();
 	}
 
 	// $: console.log(grid);
@@ -102,7 +140,24 @@
 
 {#if state === 'start'}
 	<h1>Sudoku Solver</h1>
-	<button on:click={() => (state = 'solving')}>Start</button>
+	<button on:click={() => (state = 'input')}>Start</button>
+{/if}
+
+{#if state === 'input'}
+	<div class="grid">
+		{#each grid as row, rowIndex}
+			<div class="row">
+				{#each row as cell, cellIndex}
+					<input
+					class="cell-input"
+					on:input={(e) => updateCell(e, rowIndex, cellIndex)}
+					/>
+				{/each}
+			</div>
+		{/each}
+	</div>
+	<h1>Edit the Sudoku board</h1>
+	<button on:click={() => (state = 'solving')}>Solve</button>
 {/if}
 
 {#if state === 'solving'}
@@ -119,4 +174,22 @@
 			</div>
 		{/each}
 	</div>
+{/if}
+
+{#if state === 'finished'}
+	<div class="grid">
+		{#each grid as row}
+			<div class="row">
+				{#each row as cell}
+					<div class="cell">
+						{#if cell !== 0}
+							{cell}
+						{/if}
+					</div>
+				{/each}
+			</div>
+		{/each}
+	</div>
+	<h1>Solved !</h1>
+	<button on:click={() => resetBoard()}>Solve another</button>
 {/if}
