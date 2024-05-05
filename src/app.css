@@ -34,7 +34,7 @@ h1 {
 	text-transform: capitalize;
 }
 
-h1+button {
+h1 + button {
 	width: max-content;
 	margin-top: 2rem;
 	margin-inline: auto;
@@ -55,8 +55,10 @@ button {
 
 .grid {
 	display: block;
-	padding: 5px;
-	border-radius: 15px;
+	padding: 10px;
+	border-radius: 23px;
+	border: 10px solid var(--bg-2);
+
 }
 
 .row {
@@ -67,24 +69,37 @@ button {
 	width: 70px;
 	height: 70px;
 	display: grid;
-	place-content: center;
+	place-content: center;	
 	border-radius: 8px;
 	margin: 5px;
-	font-size: 4rem;
+	font-size: 3rem;
+	padding: 10px;
 	background-color: var(--bg-2);
 }
 
 .cell-input {
 	width: 70px;
 	height: 70px;
-	font-size: 4rem;
+	font-size: 3rem;
 	background-color: var(--bg-2);
 	margin: 5px;
+	padding: 10px;
 	text-align: center;
 	border-radius: 8px;
+	border-color: rgba(0, 0, 0, 0);
 	color: var(--txt-1);
+	outline: none;
 }
 
 .cell-input:focus {
 	color: var(--txt-1);
+	outline: none;
+}
+
+.rowDivide {
+	margin-bottom: 6px;
+}
+
+.colDivide {
+	margin-right: 12px;
 }

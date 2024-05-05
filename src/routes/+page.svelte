@@ -1,5 +1,8 @@
 <script lang="ts">
+	import Grid from './Grid.svelte';
 	type State = 'start' | 'input' | 'solving' | 'finished';
+
+	const seperator_indexes: number[] = [2, 5];
 
 	let state: State = 'start';
 	$: grid = [
@@ -14,21 +17,10 @@
 		[0, 0, 0, 0, 0, 0, 0, 0, 0]
 	];
 	// let timeout = 0;
-	// $: grid = [
-	// 	[5, 3, 0, 0, 7, 0, 0, 0, 0],
-	// 	[6, 0, 0, 1, 9, 5, 0, 0, 0],
-	// 	[0, 9, 8, 0, 0, 0, 0, 6, 0],
-	// 	[8, 0, 0, 0, 6, 0, 0, 0, 3],
-	// 	[4, 0, 0, 8, 0, 3, 0, 0, 1],
-	// 	[7, 0, 0, 0, 2, 0, 0, 0, 6],
-	// 	[0, 6, 0, 0, 0, 0, 2, 8, 0],
-	// 	[0, 0, 0, 4, 1, 9, 0, 0, 5],
-	// 	[0, 0, 0, 0, 8, 0, 0, 7, 9]
-	// ];
 
-	function sleep(ms) {
-		return new Promise((resolve) => setTimeout(resolve, ms));
-	}
+	// function sleep(ms) {
+	// 	return new Promise((resolve) => setTimeout(resolve, ms));
+	// }
 
 	// solving algo
 
@@ -88,7 +80,7 @@
 		for (let i = 1; i < 10; i++) {
 			if (check_digit(i, y, x)) {
 				// await sleep(timeout).then(() => {
-					grid[y][x] = i;
+				grid[y][x] = i;
 				// });
 
 				if (await solve()) {
@@ -96,7 +88,7 @@
 				}
 
 				// await sleep(timeout).then(() => {
-					grid[y][x] = 0;
+				grid[y][x] = 0;
 				// });
 			}
 		}
@@ -110,10 +102,9 @@
 		state = 'finished';
 	}
 
-	function updateCell(e: InputEvent, row, col)
-	{
-		const value = e.data
-		grid[row][col] = value !== null ? parseInt(value) : 0
+	function updateCell(e: InputEvent, row, col) {
+		const value = e.data;
+		grid[row][col] = value !== null ? parseInt(value) : 0;
 	}
 
 	function resetBoard() {
@@ -134,8 +125,6 @@
 	$: if (state === 'solving') {
 		start();
 	}
-
-	// $: console.log(grid);
 </script>
 
 {#if state === 'start'}
@@ -146,11 +135,12 @@
 {#if state === 'input'}
 	<div class="grid">
 		{#each grid as row, rowIndex}
-			<div class="row">
+			<div class="row" class:rowDivide={seperator_indexes.includes(rowIndex)}>
 				{#each row as cell, cellIndex}
 					<input
-					class="cell-input"
-					on:input={(e) => updateCell(e, rowIndex, cellIndex)}
+						class="cell-input"
+						class:colDivide={seperator_indexes.includes(cellIndex)}
+						on:input={(e) => updateCell(e, rowIndex, cellIndex)}
 					/>
 				{/each}
 			</div>
@@ -161,35 +151,11 @@
 {/if}
 
 {#if state === 'solving'}
-	<div class="grid">
-		{#each grid as row}
-			<div class="row">
-				{#each row as cell}
-					<div class="cell">
-						{#if cell !== 0}
-							{cell}
-						{/if}
-					</div>
-				{/each}
-			</div>
-		{/each}
-	</div>
+	<Grid {grid} />
 {/if}
 
 {#if state === 'finished'}
-	<div class="grid">
-		{#each grid as row}
-			<div class="row">
-				{#each row as cell}
-					<div class="cell">
-						{#if cell !== 0}
-							{cell}
-						{/if}
-					</div>
-				{/each}
-			</div>
-		{/each}
-	</div>
+	<Grid {grid} />
 	<h1>Solved !</h1>
 	<button on:click={() => resetBoard()}>Solve another</button>
 {/if}
