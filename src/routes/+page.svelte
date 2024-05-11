@@ -128,8 +128,10 @@
 </script>
 
 {#if state === 'start'}
-	<h1>Sudoku Solver</h1>
-	<button on:click={() => (state = 'input')}>Start</button>
+	<div class="intro">
+		<h1>Sudoku Solver</h1>
+		<button on:click={() => (state = 'input')}>Start</button>
+	</div>
 {/if}
 
 {#if state === 'input'}

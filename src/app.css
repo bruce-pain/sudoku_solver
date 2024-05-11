@@ -17,6 +17,13 @@
 html,
 body {
 	height: 100%;
+	--cell-width: 50px;
+	--cell-height: 50px;
+	--rowDivideMargin: 6px;
+	--colDivideMargin: 12px;
+	--cellMargin: 5px;
+	--borderRadius: 5px;
+	--cellFont: 2.5rem;
 }
 
 body {
@@ -38,7 +45,7 @@ h1 + button {
 	width: max-content;
 	margin-top: 2rem;
 	margin-inline: auto;
-	border: 4px solid var(--border);
+	border: 4px solid var(--bg-2);
 }
 
 button {
@@ -53,39 +60,73 @@ button {
 	cursor: pointer;
 }
 
+.intro {
+	margin: auto;
+	display: grid;
+	place-content: center;
+}
+
 .grid {
+	margin: auto;
 	display: block;
 	padding: 10px;
 	border-radius: 23px;
 	border: 10px solid var(--bg-2);
-
 }
 
 .row {
 	display: flex;
 }
 
+@media screen and (max-width: 840px) {
+	body {
+		--cell-width: 30px;
+		--cell-height: 30px;
+		--rowDivideMargin: 3px;
+		--colDivideMargin: 6px;
+		--cellMargin: 2.5px;
+		--borderRadius: 5px;
+		--cellFont: 1.5rem;
+	}
+
+	.grid {
+		width: fit-content;
+		margin: 1rem;
+		border-radius: 20px;
+	}
+	h1 {
+		font-size: 2rem;
+	}
+	h1 + button {
+		margin-top: 1rem;
+		padding: 10px;
+	}
+
+	.cell-input:focus {
+		padding: 0px;
+	}
+}
 .cell {
-	width: 70px;
-	height: 70px;
+	width: var(--cell-width);
+	height: var(--cell-height);
 	display: grid;
-	place-content: center;	
-	border-radius: 8px;
-	margin: 5px;
-	font-size: 3rem;
+	place-content: center;
+	border-radius: var(--borderRadius);
+	margin: var(--cellMargin);
+	font-size: var(--cellFont);
 	padding: 10px;
 	background-color: var(--bg-2);
 }
 
 .cell-input {
-	width: 70px;
-	height: 70px;
-	font-size: 3rem;
+	width: var(--cell-width);
+	height: var(--cell-height);
+	font-size: var(--cellFont);
 	background-color: var(--bg-2);
-	margin: 5px;
+	margin: var(--cellMargin);
 	padding: 10px;
 	text-align: center;
-	border-radius: 8px;
+	border-radius: var(--borderRadius);
 	border-color: rgba(0, 0, 0, 0);
 	color: var(--txt-1);
 	outline: none;
@@ -97,9 +138,9 @@ button {
 }
 
 .rowDivide {
-	margin-bottom: 6px;
+	margin-bottom: var(--rowDivideMargin);
 }
 
 .colDivide {
-	margin-right: 12px;
+	margin-right: var(--colDivideMargin);
 }
